@@ -1,0 +1,15 @@
+{
+  "name": "top-project-battleship",
+  "version": "1.0.0",
+  "description": "JavaScript Course: A project to practice Test Driven Development (TDD)",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
