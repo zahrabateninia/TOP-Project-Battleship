@@ -1,5 +1,6 @@
-import Player from "../src/player";
-import Gameboard from "../src/gameboard";
+const Player = require("../src/modules/player");
+const Gameboard = require("../src/modules/gameboard");
+
 
 describe("Player", () => {
   test("creates a player with a gameboard", () => {
