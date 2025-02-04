@@ -17,9 +17,12 @@ class Player {
     } while (
       enemyGameboard.missedShots.some(
         (shot) => shot[0] === randomCoord[0] && shot[1] === randomCoord[1]
+      ) ||
+      enemyGameboard.ships.some((ship) =>
+        ship.hits.some((hit) => hit[0] === randomCoord[0] && hit[1] === randomCoord[1])
       )
-    ); // Ensure the attack hasn't been made before
-
+    ); // Check both missed shots and already hit positions
+  
     enemyGameboard.receiveAttack(randomCoord);
   }
 }
