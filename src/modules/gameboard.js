@@ -11,7 +11,8 @@ class Gameboard {
   
     receiveAttack(coord) {
       for (let ship of this.ships) {
-        if (JSON.stringify(ship.position) === JSON.stringify(coord)) {
+        // if (JSON.stringify(ship.position) === JSON.stringify(coord))
+        if (ship.position[0] === coord[0] && ship.position[1] === coord[1]){
           ship.hit();
           return;
         }
