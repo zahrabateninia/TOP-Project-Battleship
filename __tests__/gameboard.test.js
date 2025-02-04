@@ -1,32 +1,21 @@
-const Gameboard = require('../src/modules/gameboard');
-const Ship = require('../src/modules/ship');
+const Gameboard = require("../src/modules/gameboard")
 
-describe('Gameboard', () => {
-  test('places a ship at specific coordinates', () => {
-    const gameboard = new Gameboard();
-    const ship = new Ship(3);
+test("places a ship correctly", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(3, [0, 0], "horizontal");
+  expect(gameboard.ships[0].position.has("0,0")).toBe(true);
+  expect(gameboard.ships[0].position.has("0,1")).toBe(true);
+});
 
-    gameboard.placeShip(ship, [0, 0]); // Place the ship at (0,0)
+test("registers a hit on a ship", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(2, [1, 1], "horizontal");
+  expect(gameboard.receiveAttack([1, 1])).toBe("hit");
+});
 
-    expect(gameboard.ships.length).toBe(1); // Check if the ship was added
-    expect(gameboard.ships[0].position).toEqual([0, 0]); // Check if position is stored correctly
-  });
-
-  test('receiveAttack() registers a hit on the correct ship', () => {
-    const gameboard = new Gameboard();
-    const ship = new Ship(3);
-    gameboard.placeShip(ship, [0, 0]);
-  
-    gameboard.receiveAttack([0, 0]); 
-  
-    expect(ship.hits).toBe(1); // Ship should have 1 hit
-  });
-  
-  test('receiveAttack() records missed shots', () => {
-    const gameboard = new Gameboard();
-    gameboard.receiveAttack([2, 2]); 
-  
-    expect(gameboard.missedShots).toContainEqual([2, 2]); 
-  });
-  
+test("registers a missed shot", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(2, [1, 1], "horizontal");
+  expect(gameboard.receiveAttack([3, 3])).toBe("miss");
+  expect(gameboard.missedShots.has("3,3")).toBe(true);
 });
