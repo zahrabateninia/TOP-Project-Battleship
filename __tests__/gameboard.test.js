@@ -1,21 +1,45 @@
-const Gameboard = require("../src/modules/gameboard")
+const Gameboard = require("../src/modules/gameboard");
+const Ship = require("../src/modules/ship");
 
-test("places a ship correctly", () => {
-  const gameboard = new Gameboard();
-  gameboard.placeShip(3, [0, 0], "horizontal");
-  expect(gameboard.ships[0].position.has("0,0")).toBe(true);
-  expect(gameboard.ships[0].position.has("0,1")).toBe(true);
-});
+describe("Gameboard", () => {
+  let gameboard;
 
-test("registers a hit on a ship", () => {
-  const gameboard = new Gameboard();
-  gameboard.placeShip(2, [1, 1], "horizontal");
-  expect(gameboard.receiveAttack([1, 1])).toBe("hit");
-});
+  beforeEach(() => {
+    gameboard = new Gameboard();
+  });
 
-test("registers a missed shot", () => {
-  const gameboard = new Gameboard();
-  gameboard.placeShip(2, [1, 1], "horizontal");
-  expect(gameboard.receiveAttack([3, 3])).toBe("miss");
-  expect(gameboard.missedShots.has("3,3")).toBe(true);
+  test("places a ship at the correct coordinates", () => {
+    gameboard.placeShip(3, [2, 2], "horizontal");
+
+    expect(gameboard.ships.length).toBe(1);
+    expect(gameboard.ships[0].position).toEqual([
+      [2, 2],
+      [2, 3],
+      [2, 4],
+    ]);
+  });
+
+  test("prevents overlapping ships", () => {
+    gameboard.placeShip(3, [1, 1], "horizontal");
+    const result = gameboard.placeShip(2, [1, 2], "horizontal"); // Overlaps
+
+    expect(result).toBe("Error: Ship overlap detected!");
+    expect(gameboard.ships.length).toBe(1); // No second ship added
+  });
+
+  test("registers a hit when a ship is attacked", () => {
+    gameboard.placeShip(3, [0, 0], "vertical");
+    const result = gameboard.receiveAttack([0, 0]);
+
+    expect(result).toBe("hit");
+    expect(gameboard.ships[0].hits).toBe(1);
+  });
+
+  test("registers a miss when attacking an empty coordinate", () => {
+    gameboard.placeShip(3, [5, 5], "horizontal");
+    const result = gameboard.receiveAttack([2, 2]);
+
+    expect(result).toBe("miss");
+    expect(gameboard.missedShots.has("2,2")).toBe(true);
+  });
 });
