@@ -17,3 +17,5 @@ test("does not register a hit if position is wrong", () => {
   const ship = new Ship(3, [[0, 0], [0, 1], [0, 2]]);
   expect(ship.hit([1, 1])).toBe(false);
 });
+
+

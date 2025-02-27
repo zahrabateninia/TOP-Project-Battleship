@@ -42,4 +42,17 @@ describe("Gameboard", () => {
     expect(result).toBe("miss");
     expect(gameboard.missedShots.has("2,2")).toBe(true);
   });
+
+  test("ends the game when all player's ships are sunk", () => {
+    gameboard.placeShip(1, [0, 0], "horizontal");
+    gameboard.placeShip(1, [1, 0], "horizontal");
+  
+    // Attack all positions
+    gameboard.receiveAttack([0, 0]);
+    gameboard.receiveAttack([1, 0]);
+  
+    const result = gameboard.receiveAttack([0, 1]); // Miss
+    expect(result).toBe("Game Over! You lost.");
+  });
+  
 });

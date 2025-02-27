@@ -1,9 +1,9 @@
-const Ship = require("./ship");
+const Ship= require('./ship');
 
 class Gameboard {
   constructor() {
     this.ships = [];
-    this.missedShots = new Set(); // Keep Set for missed shots
+    this.missedShots = new Set(); // Set to track missed shots
   }
 
   placeShip(length, startCoord, direction) {
@@ -26,20 +26,44 @@ class Gameboard {
       return "Error: Ship overlap detected!";
     }
 
-    const ship = new Ship(length, position); // position is always an array of arrays
+    const ship = new Ship(length, position);
     this.ships.push(ship);
   }
 
   receiveAttack(coord) {
     for (let ship of this.ships) {
       if (ship.hit(coord)) {
-        return "hit"; 
+        // Check victory after a successful hit
+        if (this.checkVictory()) {
+          return "You won! All ships have been sunk.";
+        }
+        return "hit";
       }
     }
 
-    // Store missed shots as strings for quick lookup in Set
     this.missedShots.add(coord.join(',')); 
+    // Check if player lost after every attack
+    if (this.checkLoss()) {
+      return "Game Over! You lost.";
+    }
     return "miss";
+  }
+
+  // Function to check if all ships are sunk
+  checkVictory() {
+    // Check if all ships are sunk (no hits left on any ship)
+    return this.ships.every(ship => ship.isSunk());
+  }
+
+  // Function to check if all ships are sunk (for loss condition)
+  checkLoss() {
+    return this.ships.every(ship => ship.isSunk());
+  }
+
+  // Function to reset the game for a new round
+  resetGame() {
+    this.ships = [];
+    this.missedShots = new Set();
   }
 }
 
