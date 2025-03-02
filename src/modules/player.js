@@ -7,6 +7,8 @@ class Player {
   attack(coord, enemyGameboard) {
     const coordStr = coord.join(",");
 
+    console.log(coordStr)
+
     if (this.attackedCoordinates.has(coordStr)) {
       return "already attacked"; // Prevent duplicate attacks
     }
@@ -23,6 +25,11 @@ class Player {
 
     return this.attack(coord, enemyGameboard);
   }
+
+  startTurn() {
+    this.isMyTurn = true;
+  }
+  
 }
 
 module.exports = Player;

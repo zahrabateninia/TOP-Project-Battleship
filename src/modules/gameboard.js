@@ -43,7 +43,7 @@ class Gameboard {
 
     this.missedShots.add(coord.join(',')); 
     // Check if player lost after every attack
-    if (this.checkLoss()) {
+    if (this.checkVictory()) {
       return "Game Over! You lost.";
     }
     return "miss";
@@ -52,11 +52,6 @@ class Gameboard {
   // Function to check if all ships are sunk
   checkVictory() {
     // Check if all ships are sunk (no hits left on any ship)
-    return this.ships.every(ship => ship.isSunk());
-  }
-
-  // Function to check if all ships are sunk (for loss condition)
-  checkLoss() {
     return this.ships.every(ship => ship.isSunk());
   }
 

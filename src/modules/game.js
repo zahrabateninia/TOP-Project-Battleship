@@ -36,7 +36,7 @@ class Game {
     if (this.computerBoard.checkVictory()) {
       return "You won! All computer ships have been sunk.";
     }
-    if (this.playerBoard.checkLoss()) {
+    if (this.playerBoard.checkVictory()) {
       return "Game Over! You lost.";
     }
     return null;

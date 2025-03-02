@@ -5,7 +5,7 @@ describe("Game", () => {
 
   beforeEach(() => {
     game = new Game();
-    game.playerBoard.placeShip(2, [0, 0], "horizontal"); // Player's ship
+    game.playerBoard.placeShip(2, [0, 0], "horizontal"); // Player's ship -> [0,0] [0,1]
     game.computerBoard.placeShip(2, [1, 1], "horizontal"); // Computer's ship
   });
 
@@ -25,7 +25,10 @@ describe("Game", () => {
 
   test("game detects when player wins", () => {
     game.playerAttack([1, 1]); // Hit
+    game.computerAttack();
     game.playerAttack([1, 2]); // Sink ship
+    // debug:
+    console.log("Computer ships:", game.computerBoard.ships);
 
     expect(game.checkGameOver()).toBe("You won! All computer ships have been sunk.");
   });
