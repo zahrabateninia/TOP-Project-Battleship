@@ -1,51 +1,40 @@
-const Player = require('../src/modules/player');
+const Player = require("../src/modules/player");
+const Gameboard = require("../src/modules/gameboard");
 
-
-describe('Player class', () => {
-  let player1, player2, mockGameboard;
+describe("Player", () => {
+  let player, enemyBoard;
 
   beforeEach(() => {
-    player1 = new Player();
-    player2 = new Player();
-    // Creates a mock object 
-    mockGameboard = {
-      // jest.fn(() => 'hit') tells the mock function to return the string 'hit' when called
-      receiveAttack: jest.fn(() => 'hit'),
-    };
+    player = new Player(false);
+    enemyBoard = new Gameboard();
+    enemyBoard.placeShip(3, [0, 0], "horizontal"); // Place a test ship
   });
 
-  test('player cannot attack if it is not their turn', () => {
-    expect(player1.attack([0, 0], mockGameboard)).toBe('not your turn');
+  test("attacks the enemy gameboard successfully", () => {
+    const result = player.attack([0, 0], enemyBoard);
+    expect(result).toBe("hit");
+    expect(enemyBoard.ships[0].hits).toBe(1);
   });
 
-  test('player can attack when it is their turn', () => {
-    player1.startTurn();
-    expect(player1.attack([0, 0], mockGameboard)).toBe('hit');
+  test("prevents duplicate attacks", () => {
+    player.attack([0, 0], enemyBoard);
+    const result = player.attack([0, 0], enemyBoard);
+    expect(result).toBe("already attacked");
   });
 
-  test('player ends turn after attacking', () => {
-    player1.startTurn();
-    player1.attack([0, 0], mockGameboard);
-    expect(player1.attack([1, 1], mockGameboard)).toBe('not your turn');
-  });
-
-  test('turn switches between players', () => {
-    player1.startTurn();
-    player1.attack([0, 0], mockGameboard);
-
-    player2.startTurn();
-    expect(player2.attack([1, 1], mockGameboard)).toBe('hit');
-  });
-
-  test('computer cannot attack if it is not its turn', () => {
+  test("computer generates a valid attack", () => {
     const computer = new Player(true);
-    expect(computer.computerAttack(mockGameboard)).toBe("not computer's turn");
+    const result = computer.computerAttack(enemyBoard);
+
+    expect(["hit", "miss"]).toContain(result); // Ensures it returns either "hit" or "miss"
   });
 
-  test('computer can attack when it is its turn', () => {
+  test("computer does not attack the same place twice", () => {
     const computer = new Player(true);
-    computer.startTurn();
-    computer.computerAttack(mockGameboard);
-    expect(mockGameboard.receiveAttack).toHaveBeenCalled();
+    const firstAttack = computer.computerAttack(enemyBoard);
+    const secondAttack = computer.computerAttack(enemyBoard);
+
+    expect(firstAttack).not.toBe("already attacked");
+    expect(secondAttack).not.toBe("already attacked");
   });
 });
