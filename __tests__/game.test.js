@@ -28,7 +28,7 @@ describe("Game", () => {
     game.computerAttack();
     game.playerAttack([1, 2]); // Sink ship
     // debug:
-    console.log("Computer ships:", game.computerBoard.ships);
+    // console.log("Computer ships:", game.computerBoard.ships);
 
     expect(game.checkGameOver()).toBe("You won! All computer ships have been sunk.");
   });
